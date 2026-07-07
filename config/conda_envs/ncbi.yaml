@@ -1,0 +1,6 @@
+name: ncbi
+channels:
+  - conda-forge
+dependencies:
+  - ca-certificates=2026.6.17
+  - ncbi-datasets-cli=18.32.0
