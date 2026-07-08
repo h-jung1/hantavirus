@@ -1,0 +1,13 @@
+name: bioinformatics
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - biopython
+  - mash=2.3
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - pip
+  - python=3.14.6
