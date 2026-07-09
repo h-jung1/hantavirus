@@ -76,11 +76,15 @@ rule produce_tree:
         rules.align_proteins.output,
     output:
         "results/species_tree/aligned_{segment}.fasta.treefile",
-    params:
-        prefix="results/species_tree/tree_{segment}",
     conda:
         "../config/conda_envs/bioinformatics.yaml",
     shell:
         """
         iqtree -s {input} -m JTT -redo
         """
+
+rule root_ladder_tree:
+    input:
+        rules.produce_trees.output,
+    output:
+        "results/species_tree/rooted"
