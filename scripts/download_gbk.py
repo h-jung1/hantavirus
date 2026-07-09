@@ -4,6 +4,7 @@ import argparse
 
 Entrez.email = "hello@nextstrain.org"
 
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="download genbank records for list of accession ids"
@@ -12,6 +13,7 @@ def parse_args():
     parser.add_argument("--out", help="Path to output file")
 
     return parser.parse_args()
+
 
 def main():
     args = parse_args()
@@ -22,5 +24,6 @@ def main():
 
     SeqIO.write(record, args.out, "genbank")
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()

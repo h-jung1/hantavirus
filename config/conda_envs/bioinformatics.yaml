@@ -4,6 +4,7 @@ channels:
   - bioconda
 dependencies:
   - biopython
+  - iqtree
   - mash=2.3
   - numpy
   - pandas
