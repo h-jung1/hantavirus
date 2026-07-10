@@ -40,6 +40,7 @@ rule combine_proteins:
         cat {input} > {output}
         """
 
+
 rule sort_by_length:
     input:
         rules.combine_proteins.output,
@@ -53,6 +54,7 @@ rule sort_by_length:
         """
         python scripts/sort_by_length.py \
         --input {input} \
+        --special_cases "data/refseqs/special_cases.csv" \
         --output_s {output.s} \
         --output_m {output.m} \
         --output_l {output.l}
@@ -85,6 +87,15 @@ rule produce_tree:
 
 rule root_ladder_tree:
     input:
-        rules.produce_trees.output,
+        rules.produce_tree.output,
     output:
-        "results/species_tree/rooted"
+        "results/species_tree/rooted_ladder_{segment}.pdf",
+    conda:
+        "../config/conda_envs/bioinformatics.yaml",
+    shell:
+        """
+        python scripts/root_ladderize.py \
+        --input {input} \
+        --output {output}
+        """
+    

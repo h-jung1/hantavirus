@@ -34,7 +34,7 @@ def main():
                 source = source.replace(" ", "_")
                 protein_record = SeqRecord(
                         seq=Seq(translation[0]),
-                        id='|' + accession + '|' + source,
+                        id= accession + '|' + source,
                         description=product,
                     )
 
