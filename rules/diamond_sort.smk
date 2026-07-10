@@ -33,10 +33,10 @@ rule make_diamond_db:
 
 rule diamond_align:
     input:
-        fasta_seq = "data/ncbi_dataset_sequences.fasta",
-        diamond_db = rules.make_diamond_db.output,
+        fasta_seq="data/ncbi_dataset_sequences.fasta",
+        diamond_db=rules.make_diamond_db.output,
     output:
-        diamond_tsv = "results/diamond_alignments.tsv",
+        diamond_tsv="results/diamond_alignments.tsv",
     conda:
         "../config/conda_envs/bioinformatics.yaml",
     threads: 8
@@ -50,3 +50,19 @@ rule diamond_align:
             --out {output.diamond_tsv} \
             --outfmt 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore
         """
+
+rule add_to_metadata:
+    input:
+        diamond_tsv=rules.diamond_align.output,
+        metadata="data/ncbi_dataset_report_raw.tsv"
+    output:
+        "data/ncbi_dataset_seq_assigned.tsv",
+    conda:
+        "../config/conda_envs/bioinformatics.yaml",
+    shell:
+        """
+        python scripts/add_to_metadata.py \
+        --diamond_tsv {input.diamond_tsv} \
+        --metadata {input.metadata} \
+        --output {output}"""
+    

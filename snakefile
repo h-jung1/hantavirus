@@ -13,7 +13,8 @@ rule all:
         expand("results/species_tree/rooted_ladder_{segment}.pdf", segment=segment),
         "data/diamond_db/refseq_segments.fasta",
         "data/diamond_db/diamond.dmnd",
-        "results/diamond_alignments.tsv"
+        "results/diamond_alignments.tsv",
+        "data/ncbi_dataset_seq_assigned.tsv"
     
 
 include: "rules/download.smk"
