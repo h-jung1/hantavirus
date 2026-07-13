@@ -14,7 +14,8 @@ rule all:
         "data/diamond_db/refseq_segments.fasta",
         "data/diamond_db/diamond.dmnd",
         "results/diamond_alignments.tsv",
-        "data/ncbi_dataset_seq_assigned.tsv"
+        "data/ncbi_dataset_seq_assigned.tsv",
+        directory("results/graphics")
     
 
 include: "rules/download.smk"

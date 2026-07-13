@@ -64,5 +64,23 @@ rule add_to_metadata:
         python scripts/add_to_metadata.py \
         --diamond_tsv {input.diamond_tsv} \
         --metadata {input.metadata} \
-        --output {output}"""
+        --output {output}
+        """
+
+rule graph_seq_assignment:
+    input:
+        diamond_tsv=rules.diamond_align.output,
+        ncbi_set=rules.add_to_metadata.output,
+    output:
+        directory("results/graphics")
+    conda:
+        "../config/conda_envs/bioinformatics.yaml",
+    shell:
+        """
+        python scripts/graph_seq_assignment.py \
+        --assigned_set {input.ncbi_set} \
+        --diamond_tsv {input.diamond_tsv} \
+        --output_dir {output}
+        """
+
     
