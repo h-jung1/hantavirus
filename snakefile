@@ -4,6 +4,12 @@ import pandas as pd
 meta = pd.read_csv("config/refseqs.csv")
 ref_acc = meta["Accession"].to_list()
 segment = ["m", "l", "s"]
+species= ["Hantavirus Z10", "Orthohantavirus hantanense", "Orthohantavirus puumalaense",
+            "Orthohantavirus seoulense", "Orthohantavirus tulaense"]
+
+include: "rules/download.smk"
+include: "rules/species_tree.smk"
+include: "rules/diamond_sort.smk"
 
 rule all:
     input:
@@ -15,9 +21,9 @@ rule all:
         "data/diamond_db/diamond.dmnd",
         "results/diamond_alignments.tsv",
         "data/ncbi_dataset_seq_assigned.tsv",
-        directory("results/graphics")
+        rules.add_missing_translations.output,
+        rules.graph_seq_assignment.output
+
     
 
-include: "rules/download.smk"
-include: "rules/species_tree.smk"
-include: "rules/diamond_sort.smk"
+# include: "rules/prepare_seq.smk"

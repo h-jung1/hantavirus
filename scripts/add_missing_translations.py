@@ -10,7 +10,8 @@ def parse_args():
         description="add genbank protein records"
     )
     parser.add_argument("--acc", help="Path to file with missing accession ids")
-    parser.add_argument("--output", help="Path to gbk file output")
+    parser.add_argument("--gbk_output", help="Path to gbk file output")
+    parser.add_argument("--protein_dir", help="Path to protein files")
 
     return parser.parse_args()
 
@@ -59,11 +60,11 @@ def main():
                 )
 
             record.features.append(feature)
-            SeqIO.write(record, f"{args.output}/{record.id}_new.gbk", "genbank")
+            SeqIO.write(record, f"{args.gbk_output}/{record.id}_new.gbk", "genbank")
 
             protein_record = SeqRecord(seq=Seq(longest_translation),id= accession + '|' + source,
                             description="own translation")
-            output_path = f"data/refseqs/proteins/{accession}.fasta"
+            output_path = f"{args.protein_dir}/{accession}.fasta"
             SeqIO.write(protein_record, output_path, "fasta")
 
 

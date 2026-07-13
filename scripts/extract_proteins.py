@@ -10,7 +10,7 @@ def parse_args():
         description="extract protein sequences out of genbank files"
     )
     parser.add_argument("--input", help="Path to input file")
-    parser.add_argument("--output", help="Path to output file")
+    parser.add_argument("--output", help="Path to output fasta files")
 
     return parser.parse_args()
 
@@ -44,8 +44,6 @@ def main():
     if largest_record is None:
         open(args.output, "w").close()
 
-        with open("data/refseqs/proteins/missing.txt", "a") as file:
-            file.write(f"{args.input} \n")
     else:
         SeqIO.write(largest_record, args.output, "fasta")
 

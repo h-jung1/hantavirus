@@ -13,9 +13,34 @@ rule extract_proteins:
         --output {output}
         """
 
+rule find_missing_proteins:
+    input:
+        expand("data/refseqs/proteins/{acc}.fasta", acc=ref_acc),
+    output:
+        "data/refseqs/missing_proteins.txt"
+    shell:
+        """
+        python scripts/find_missing_proteins.py \
+        --input {input} \
+        --gbk_dir {output} \
+        """ 
+
+rule add_missing_translations:
+    input: 
+       rules.find_missing_proteins.output,
+    output:
+        directory("results/new_gbk"),
+    shell:
+        """
+        python scripts/add_missing_translations.py \
+        --acc {input} \
+        --gbk_output {output}
+        --protein_dir data/refseqs/proteins"""
+
 rule find_protein_length:
     input: 
-        expand("data/refseqs/proteins/{acc}.fasta", acc=ref_acc),
+        proteins = expand("data/refseqs/proteins/{acc}.fasta", acc=ref_acc),
+        translations_added=rules.add_missing_translations.output
     output:
         "data/refseqs/protein_length.csv"
     conda:
@@ -23,21 +48,21 @@ rule find_protein_length:
     shell:
         """
         python scripts/find_protein_length.py \
-        --input {input} \
+        --input {input.proteins} \
         --output {output}
         """
 
-
 rule combine_proteins:
     input:
-        expand("data/refseqs/proteins/{acc}.fasta", acc=ref_acc),
+        proteins = expand("data/refseqs/proteins/{acc}.fasta", acc=ref_acc),
+        translations_added=rules.add_missing_translations.output
     output:
         "data/refseqs/combined/all_proteins.fasta"
     conda:
         "../config/conda_envs/bioinformatics.yaml"
     shell:
         """
-        cat {input} > {output}
+        cat {input.proteins} > {output}
         """
 
 

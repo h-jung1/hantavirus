@@ -30,7 +30,7 @@ def main():
 
     metadata=pd.read_csv(args.metadata, sep='\t')
     
-    diamond_subset=diamond_tsv[["Accession", "assigned_species", "assigned_segment"]]
+    diamond_subset=diamond_tsv[["Accession", "assigned_species", "assigned_segment", "pident"]]
     new_df = pd.merge(metadata,diamond_subset, on="Accession")
     
     new_df.to_csv(args.output, sep='\t', index=False)
