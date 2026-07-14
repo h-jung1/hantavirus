@@ -33,7 +33,7 @@ rule make_diamond_db:
 
 rule diamond_align:
     input:
-        fasta_seq="data/ncbi_dataset_sequences.fasta",
+        fasta_seq=rules.extract_ncbi_dataset_sequences.output,
         diamond_db=rules.make_diamond_db.output,
     output:
         diamond_tsv="results/diamond_alignments.tsv",
@@ -54,7 +54,7 @@ rule diamond_align:
 rule add_to_metadata:
     input:
         diamond_tsv=rules.diamond_align.output,
-        metadata="data/ncbi_dataset_report_raw.tsv"
+        metadata=rules.format_ncbi_dataset_report.output.ncbi_dataset_tsv,
     output:
         "data/ncbi_dataset_seq_assigned.tsv",
     conda:

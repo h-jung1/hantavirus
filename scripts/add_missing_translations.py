@@ -9,7 +9,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description="add genbank protein records"
     )
-    parser.add_argument("--acc", help="Path to file with missing accession ids")
+    parser.add_argument("--missing", help="Path to file with missing accession ids")
     parser.add_argument("--gbk_output", help="Path to gbk file output")
     parser.add_argument("--protein_dir", help="Path to protein files")
 
@@ -18,9 +18,9 @@ def parse_args():
 def main():
     args = parse_args()
 
-    Path(args.output).mkdir(parents=True, exist_ok=True)
+    Path(args.gbk_output).mkdir(parents=True, exist_ok=True)
 
-    with open(args.acc, "r") as file:
+    with open(args.missing, "r") as file:
         for line in file:
             path=line.strip()
             record=SeqIO.read(path, "genbank")

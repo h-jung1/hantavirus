@@ -20,18 +20,23 @@ def main():
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
 
     diamond_tsv = pd.read_csv(args.diamond_tsv, sep='\t', header=None)
-    diamond_tsv.columns = ["Accession", "sseqid", "pident", "length", "mismatch",
+    diamond_tsv.columns = ["accession", "sseqid", "pident", "length", "mismatch",
                         "gapopen", "qstart", "qend", "sstart", "send",
                         "evalue", "bitscore"]
     split_sseqid = diamond_tsv["sseqid"].str.split('|', expand=True)
     diamond_tsv["assigned_species_id"]=split_sseqid[0]
     diamond_tsv["assigned_species"]=split_sseqid[1]
     diamond_tsv["assigned_segment"]=split_sseqid[2]
+    split_accession=diamond_tsv["accession"].str.split('.', expand=True)
+    diamond_tsv["accession"]=split_accession[0]
+    diamond_tsv["accession_version"]=split_accession[1]
 
     metadata=pd.read_csv(args.metadata, sep='\t')
     
-    diamond_subset=diamond_tsv[["Accession", "assigned_species", "assigned_segment", "pident"]]
-    new_df = pd.merge(metadata,diamond_subset, on="Accession")
+    diamond_subset=diamond_tsv[["accession", "accession_version", "assigned_species", "assigned_segment", "pident"]]
+    print(diamond_subset["accession"].head())
+    print(metadata["accession"].head())
+    new_df = pd.merge(metadata,diamond_subset, on="accession")
     
     new_df.to_csv(args.output, sep='\t', index=False)
 

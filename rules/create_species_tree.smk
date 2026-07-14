@@ -22,7 +22,8 @@ rule find_missing_proteins:
         """
         python scripts/find_missing_proteins.py \
         --input {input} \
-        --gbk_dir {output} \
+        --gbk_dir data/refseqs/gbk \
+        --output {output}
         """ 
 
 rule add_missing_translations:
@@ -33,9 +34,10 @@ rule add_missing_translations:
     shell:
         """
         python scripts/add_missing_translations.py \
-        --acc {input} \
-        --gbk_output {output}
-        --protein_dir data/refseqs/proteins"""
+        --missing {input} \
+        --gbk_output {output} \
+        --protein_dir data/refseqs/proteins
+        """
 
 rule find_protein_length:
     input: 

@@ -24,7 +24,7 @@ def main():
 
     # Create matrix of species and assigned species
     metadata=pd.read_csv(args.assigned_set, sep='\t')
-    confusion_species = pd.crosstab(metadata["Virus Name"], metadata["assigned_species"])
+    confusion_species = pd.crosstab(metadata["virus-name"], metadata["assigned_species"])
 
     annot_labels = confusion_species.astype(str)
     annot_labels[confusion_species < 20] = ""
@@ -34,7 +34,7 @@ def main():
     plt.savefig(f"{args.output_dir}/species_matrix.png", bbox_inches="tight")
 
     # Create matrix of segments vs assigned segments
-    confusion_segment = pd.crosstab(metadata["Segment"], metadata["assigned_segment"])
+    confusion_segment = pd.crosstab(metadata["segment"], metadata["assigned_segment"])
     plt.figure(figsize=(10,12))
     sns.heatmap(confusion_segment, annot=True, cmap="crest")
     plt.savefig(f"{args.output_dir}/segment_matrix.png")
@@ -42,7 +42,7 @@ def main():
     # Create histogramm of pident    
     Path(f"{args.output_dir}/pident").mkdir(parents=True, exist_ok=True)
     diamond_tsv=pd.read_csv(args.diamond_tsv, sep='\t', header = None)
-    diamond_tsv.columns=["Accession", "sseqid", "pident", "length", "mismatch",
+    diamond_tsv.columns=["accession", "sseqid", "pident", "length", "mismatch",
                         "gapopen", "qstart", "qend", "sstart", "send",
                         "evalue", "bitscore"]
     plt.figure(figsize=(10,12))

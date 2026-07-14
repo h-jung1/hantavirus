@@ -1,1 +1,21 @@
 ncbi_taxon_id: 1980442
+
+ncbi_datasets_fields:
+  - accession
+  - sourcedb
+  - sra-accs
+  - isolate-lineage
+  - geo-region
+  - geo-location
+  - isolate-collection-date
+  - release-date
+  - update-date
+  - length
+  - host-name
+  - isolate-lineage-source
+  - biosample-acc
+  - submitter-names
+  - submitter-affiliation
+  - submitter-country
+  - virus-name
+  - segment

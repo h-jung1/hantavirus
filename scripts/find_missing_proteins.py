@@ -23,8 +23,8 @@ def main():
     with open(args.output, "w") as output_file:
         for file in missing:
             accession = Path(file).stem
-            gbk_path = Path(args.gbk_dir/f"{accession}.gbk")
+            gbk_path = Path(f"{args.gbk_dir}/{accession}.gbk")
             output_file.write(f"{gbk_path}\n")
 
-    if __name__ == "__main__":
-        main()
+if __name__ == "__main__":
+    main() 

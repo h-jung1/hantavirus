@@ -41,6 +41,27 @@ rule extract_ncbi_dataset_sequences:
             ncbi_dataset/data/genomic.fna > {output.ncbi_dataset_sequences}
         """
 
+rule format_ncbi_dataset_report:
+    input:
+        dataset_package="data/ncbi_dataset.zip",
+    output:
+        ncbi_dataset_tsv="data/ncbi_dataset_report.tsv",
+    params:
+        ncbi_datasets_fields=",".join(config["ncbi_datasets_fields"]),
+    conda:
+        "../config/conda_envs/nextstrain.yaml"
+    shell:
+        """
+        dataformat tsv virus-genome \
+            --package {input.dataset_package} \
+            --fields {params.ncbi_datasets_fields:q} \
+            --elide-header \
+            | csvtk fix-quotes -Ht \
+            | csvtk add-header -t -n {params.ncbi_datasets_fields:q} \
+            | csvtk rename -t -f accession -n accession_version \
+            | csvtk -t mutate -f accession_version -n accession -p "^(.+?)\." --at 1 \
+          > {output.ncbi_dataset_tsv}
+        """
 
 rule download_gbk:
     output:
