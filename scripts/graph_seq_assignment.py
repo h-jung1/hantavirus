@@ -36,7 +36,7 @@ def main():
     # Create matrix of segments vs assigned segments
     confusion_segment = pd.crosstab(metadata["segment"], metadata["assigned_segment"])
     plt.figure(figsize=(10,12))
-    sns.heatmap(confusion_segment, annot=True, cmap="crest")
+    sns.heatmap(confusion_segment, annot=True, cmap="crest", fmt="d")
     plt.savefig(f"{args.output_dir}/segment_matrix.png")
 
     # Create histogramm of pident    

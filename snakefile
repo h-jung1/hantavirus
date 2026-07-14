@@ -6,6 +6,7 @@ ref_acc = meta["Accession"].to_list()
 segment = ["m", "l", "s"]
 species= ["Hantavirus_Z10", "Orthohantavirus_hantanense", "Orthohantavirus_puumalaense",
             "Orthohantavirus_seoulense", "Orthohantavirus_tulaense"]
+PIDENT=90
 
 include: "rules/fetch_from_ncbi.smk"
 include: "rules/create_species_tree.smk"
@@ -30,7 +31,9 @@ rule all:
         expand("results/curated_seq/{species}/{species}_{segment}_metadata.csv",
         species=species, segment=segment),
         expand("results/curated_seq/{species}/{species}_{segment}_seq.fasta", species=species, segment=segment),
-        expand("results/ncbi.ndjson/{species}/{species}_{segment}.ndjson", species=species, segment=segment)
+        expand("results/ncbi.ndjson/{species}/{species}_{segment}.ndjson", species=species, segment=segment),
+        expand("data/curated_metadata/{species}_{segment}.tsv", species=species, segment=segment),
+        expand("data/curated_sequences/{species}_{segment}.fasta", species=species, segment=segment)
 
     
 
