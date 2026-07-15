@@ -1,6 +1,7 @@
-import os 
+import os
 from pathlib import Path
 import argparse
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -12,19 +13,21 @@ def parse_args():
 
     return parser.parse_args()
 
+
 def main():
-    args=parse_args()
-    
-    missing=[]
+    args = parse_args()
+
+    missing = []
     for file in args.input:
         if os.path.getsize(file) == 0:
             missing.append(file)
-    
+
     with open(args.output, "w") as output_file:
         for file in missing:
             accession = Path(file).stem
             gbk_path = Path(f"{args.gbk_dir}/{accession}.gbk")
             output_file.write(f"{gbk_path}\n")
+
 
 if __name__ == "__main__":
     main() 

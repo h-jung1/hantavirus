@@ -4,3 +4,6 @@
 /.vscode
 .DS_Store
 /defaults
+/shared
+/phylogeny/results
+/phylogeny/.snakemake

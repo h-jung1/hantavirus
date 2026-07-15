@@ -4,9 +4,10 @@ import pandas as pd
 meta = pd.read_csv("config/refseqs.csv")
 ref_acc = meta["Accession"].to_list()
 segment = ["m", "l", "s"]
-species= ["Hantavirus_Z10", "Orthohantavirus_hantanense", "Orthohantavirus_puumalaense",
+species= ["Hantavirus_Z10", "Orthohantavirus_hantanense",
             "Orthohantavirus_seoulense", "Orthohantavirus_tulaense"]
 PIDENT=90
+REF_ACC=meta["Accession"].to_list()
 
 include: "rules/fetch_from_ncbi.smk"
 include: "rules/create_species_tree.smk"
@@ -18,7 +19,7 @@ rule all:
         "data/ncbi_dataset_report_raw.tsv",
         "data/ncbi_dataset.zip",
         "data/ncbi_dataset_sequences.fasta",
-        expand("data/refseqs/proteins/{acc}.fasta", acc=ref_acc),
+        rules.extract_proteins.output,
         expand("results/species_tree/aligned_{segment}.fasta", segment=segment),
         expand("results/species_tree/aligned_{segment}.fasta.treefile", segment=segment),
         expand("results/species_tree/rooted_ladder_{segment}.pdf", segment=segment),
@@ -33,7 +34,8 @@ rule all:
         expand("results/curated_seq/{species}/{species}_{segment}_seq.fasta", species=species, segment=segment),
         expand("results/ncbi.ndjson/{species}/{species}_{segment}.ndjson", species=species, segment=segment),
         expand("data/curated_metadata/{species}_{segment}.tsv", species=species, segment=segment),
-        expand("data/curated_sequences/{species}_{segment}.fasta", species=species, segment=segment)
+        expand("data/curated_sequences/{species}_{segment}.fasta", species=species, segment=segment),
+        expand("shared/{species}_{segment}_refseq.fasta", species=species, segment=segment)
 
     
 
