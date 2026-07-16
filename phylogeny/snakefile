@@ -1,0 +1,20 @@
+
+
+workdir: workflow.current_basedir
+
+configfile: "defaults/config.yaml"
+
+segment = ["m", "l", "s"]
+species= ["Hantavirus_Z10"]
+include: "rules/prepare_sequences.smk"
+include: "rules/construct_phylogeny.smk"
+
+rule all:
+    input:
+        expand("results/aligned/{species}/{species}_{segment}_aligned.fasta", segment=segment, species=species),
+        expand("results/filtered/{species}/{species}_{segment}_filtered.fasta", segment=segment, species=species),
+        expand("results/graphics/length/{species}_{segment}.png", species=species, segment=segment),
+        expand("results/trees/{species}_{segment}_tree.nwk", segment=segment, species=species),
+        #expand("results/branch_lengths/{species}_{segment}_bl.json", segment=segment, species=species),
+        #expand("results/{species}/{species}_{segment}_tree.nwk", segment=segment, species=species)
+

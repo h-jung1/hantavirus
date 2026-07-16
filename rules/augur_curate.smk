@@ -1,4 +1,19 @@
 
+rule fetch_refseqs:
+    params:
+        species="{species}",
+        segment="{segment}",
+    output:
+        "shared/{species}_{segment}_refseq.fasta",
+    shell:
+       """
+       python scripts/fetch_refseqs.py \
+       --species {params.species} \
+       --segment {params.segment} \
+       --output {output}
+       """ 
+    
+
 rule filter_by_pident:
     input:
         metadata=rules.add_to_metadata.output,

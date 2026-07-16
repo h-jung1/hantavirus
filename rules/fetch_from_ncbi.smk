@@ -64,11 +64,13 @@ rule format_ncbi_dataset_report:
         """
 
 rule download_gbk:
+    input:
+        metadata="config/refseqs.csv",
     output:
-        "data/refseqs/gbk/{acc}.gbk",
+        genbank="data/refseqs/gbk_records.gb",
     shell:
         """
         python scripts/download_gbk.py \
-        --acc {wildcards.acc} \
-        --out {output}
+        --metadata {input.metadata} \
+        --output {output.genbank}
         """

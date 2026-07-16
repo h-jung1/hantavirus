@@ -3,7 +3,7 @@ rule extract_proteins:
     input: 
         rules.download_gbk.output,
     output:
-        "data/refseqs/proteins/{acc}.fasta",
+        directory("data/refseqs/proteins/"),
     conda:
        "../config/conda_envs/bioinformatics.yaml"
     shell:

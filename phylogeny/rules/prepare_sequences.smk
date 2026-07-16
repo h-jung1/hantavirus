@@ -1,0 +1,86 @@
+"""
+This part of the workflow prepares sequences for constructing the phylogenetic tree.
+
+REQUIRED INPUTS:
+
+    metadata    = data/curated_metadata/{species}_{segment}.tsv
+    sequences   = data/curated_sequences/{species}_{segment}.fasta
+    reference   = data/shared/{species}_{segment}_refseq.fasta
+
+OUTPUTS:
+
+    prepared_sequences = results/prepared_sequences.fasta
+
+This part of the workflow usually includes the following steps:
+
+    - augur index
+    - augur filter
+    - augur align
+    - augur mask
+
+See Augur's usage docs for these commands for more details.
+"""
+rule graph_lengths:
+    """
+    Produces a graph of length distribution per species-segment combination
+    From this min_length and max_length for augur filter can be determined"""
+    input:
+        sequences = "../data/curated_sequences/{species}_{segment}.fasta",
+    output:
+        graphs = "results/graphics/length/{species}_{segment}.png"
+    shell:
+        """
+        python playground/graph_lengths.py \
+        --input {input.sequences} \
+        --output {output.graphs}
+        """
+
+rule filter:
+    """
+    Filtering to
+      - sequences per {params.species} and {params.segment}
+      - excluding strains in {input.exclude}
+    """
+    input:
+        sequences = "../data/curated_sequences/{species}_{segment}.fasta",
+        metadata = "../data/curated_metadata/{species}_{segment}.tsv",
+        exclude = config['filter']['exclude']
+    output:
+        sequences = "results/filtered/{species}/{species}_{segment}_filtered.fasta"
+    params:
+        strain_id_field = config["strain_id_field"],
+        min_length = lambda w: config['filter']['min_length'][w.species][w.segment],
+        max_length = lambda w: config['filter']['max_length'][w.species][w.segment],
+        exclude = config['filter']['exclude'],
+    shell:
+        """
+        augur filter \
+            --sequences {input.sequences} \
+            --metadata {input.metadata} \
+            --metadata-id-columns {params.strain_id_field} \
+            --output-sequences {output.sequences} \
+            --min-length {params.min_length} \
+            --max-len {params.max_length} \
+            --exclude {input.exclude} 
+        """
+
+
+rule align:
+    """
+    Aligning sequences to {input.reference}
+      - filling gaps with N
+    """
+    input:
+        sequences = rules.filter.output.sequences,
+        reference = "../shared/{species}_{segment}_refseq.fasta"
+    output:
+        alignment = "results/aligned/{species}/{species}_{segment}_aligned.fasta"
+    shell:
+        """
+        augur align \
+            --sequences {input.sequences} \
+            --reference-sequence {input.reference} \
+            --output {output.alignment} \
+#            --fill-gaps \
+            --remove-reference
+        """

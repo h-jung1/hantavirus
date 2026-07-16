@@ -1,0 +1,55 @@
+
+filter:
+  exclude: "defaults/exclude.txt"
+  min_length:
+    Hantavirus_Z10:
+      l: 0
+      m: 0
+      s: 0
+    Orthohantavirus_hantanense:
+      l: 0
+      m: 0
+      s: 0
+    Orthohantavirus_puumalaense:
+      l: 0
+      m: 0
+      s: 0
+    Orthohantavirus_seoulense:
+      l: 0
+      m: 0
+      s: 0
+    Orthohantavirus_tulaense:
+      l: 0
+      m: 0
+      s: 0
+  max_length:
+    Hantavirus_Z10:
+      l: 7000
+      m: 4000
+      s: 2000
+    Orthohantavirus_hantanense:
+      l: 7000
+      m: 4000
+      s: 2000
+    Orthohantavirus_puumalaense:
+      l: 7000
+      m: 4000
+      s: 2000
+    Orthohantavirus_seoulense:
+      l: 7000
+      m: 4000
+      s: 2000
+    Orthohantavirus_tulaense:
+      l: 7000
+      m: 4000
+      s: 2000
+  
+strain_id_field: "accession"
+
+tree:
+  method: "iqtree"
+
+refine:
+  coalescent: "opt"
+  date_inference: "marginal"
+  clock_rate: 0.0014
