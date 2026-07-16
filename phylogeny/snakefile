@@ -11,10 +11,10 @@ include: "rules/construct_phylogeny.smk"
 
 rule all:
     input:
-        expand("results/aligned/{species}/{species}_{segment}_aligned.fasta", segment=segment, species=species),
-        expand("results/filtered/{species}/{species}_{segment}_filtered.fasta", segment=segment, species=species),
-        expand("results/graphics/length/{species}_{segment}.png", species=species, segment=segment),
-        expand("results/trees/{species}_{segment}_tree.nwk", segment=segment, species=species),
-        #expand("results/branch_lengths/{species}_{segment}_bl.json", segment=segment, species=species),
-        #expand("results/{species}/{species}_{segment}_tree.nwk", segment=segment, species=species)
+        expand("results/{species}/{segment}/aligned.fasta", segment=segment, species=species),
+        expand("results/{species}/{segment}/filtered.fasta", segment=segment, species=species),
+        expand("results/{species}/{segment}/length_graph.png", species=species, segment=segment),
+        expand("results/{species}/{segment}/prelim_tree.nwk", segment=segment, species=species),
+        expand("results/{species}/{segment}/node_data.nwk", segment=segment, species=species),
+        expand("results/{species}/{segment}/final_tree.nwk", segment=segment, species=species)
 

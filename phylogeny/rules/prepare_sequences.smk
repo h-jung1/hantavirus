@@ -27,7 +27,7 @@ rule graph_lengths:
     input:
         sequences = "../data/curated_sequences/{species}_{segment}.fasta",
     output:
-        graphs = "results/graphics/length/{species}_{segment}.png"
+        graphs = "results/{species}/{segment}/length_graph.png"
     shell:
         """
         python playground/graph_lengths.py \
@@ -46,7 +46,7 @@ rule filter:
         metadata = "../data/curated_metadata/{species}_{segment}.tsv",
         exclude = config['filter']['exclude']
     output:
-        sequences = "results/filtered/{species}/{species}_{segment}_filtered.fasta"
+        sequences = "results/{species}/{segment}/filtered.fasta"
     params:
         strain_id_field = config["strain_id_field"],
         min_length = lambda w: config['filter']['min_length'][w.species][w.segment],
@@ -74,7 +74,7 @@ rule align:
         sequences = rules.filter.output.sequences,
         reference = "../shared/{species}_{segment}_refseq.fasta"
     output:
-        alignment = "results/aligned/{species}/{species}_{segment}_aligned.fasta"
+        alignment = "results/{species}/{segment}/aligned.fasta"
     shell:
         """
         augur align \
