@@ -24,21 +24,23 @@ def main():
 
     clean_species = args.species.replace('_', ' ')
     df = pd.read_csv("config/refseqs.csv")
-    print(df)
     filtered_df = df[
         (df["Virus Name"] == clean_species) &
         (df["Segment"] == args.segment.upper())
         ]
 
-    records = []
-    for accession in filtered_df["Accession"]:
-        record = SeqIO.read(
-            f"data/fasta_sequences/{accession}.fasta",
-            "fasta"
-        )
-        records.append(record)
+    records = SeqIO.parse(
+        "data/refseqs/gbk_records.gb",
+        "genbank"
+    )
+    records_to_write = []
 
-    SeqIO.write(records[0], args.output, "fasta")
+    for accession in filtered_df["Accession"]:
+        for record in records:
+            if accession == record.id:
+                records_to_write.append(record)
+
+    SeqIO.write(records_to_write[0], args.output, "genbank")
 
 
 if __name__ == "__main__":

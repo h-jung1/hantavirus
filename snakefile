@@ -35,7 +35,7 @@ rule all:
         expand("results/ncbi.ndjson/{species}/{species}_{segment}.ndjson", species=species, segment=segment),
         expand("data/curated_metadata/{species}_{segment}.tsv", species=species, segment=segment),
         expand("data/curated_sequences/{species}_{segment}.fasta", species=species, segment=segment),
-        expand("shared/{species}_{segment}_refseq.fasta", species=species, segment=segment)
+        expand("shared/{species}_{segment}_refseq.gbk", species=species, segment=segment)
 
     
 

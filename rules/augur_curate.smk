@@ -4,7 +4,7 @@ rule fetch_refseqs:
         species="{species}",
         segment="{segment}",
     output:
-        "shared/{species}_{segment}_refseq.fasta",
+        "shared/{species}_{segment}_refseq.gb",
     shell:
        """
        python scripts/fetch_refseqs.py \

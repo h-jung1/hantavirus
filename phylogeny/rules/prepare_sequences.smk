@@ -64,23 +64,30 @@ rule filter:
             --exclude {input.exclude} 
         """
 
+from Bio import SeqIO
+
+def find_reference_name(species, segment):
+    record = SeqIO.read(f"../shared/{species}_{segment}_refseq.gb", "genbank")
+    reference, version = record.id.split('.')
+
+    return reference
 
 rule align:
     """
-    Aligning sequences to {input.reference}
-      - filling gaps with N
+    Aligning sequences to {params.reference}
+    - filling gaps with -
     """
     input:
         sequences = rules.filter.output.sequences,
-        reference = "../shared/{species}_{segment}_refseq.fasta"
+    params:
+        reference = lambda wildcards: find_reference_name(wildcards.species, wildcards.segment)
     output:
         alignment = "results/{species}/{segment}/aligned.fasta"
     shell:
         """
         augur align \
             --sequences {input.sequences} \
-            --reference-sequence {input.reference} \
+            --reference-name {params.reference} \
             --output {output.alignment} \
-#            --fill-gaps \
             --remove-reference
         """

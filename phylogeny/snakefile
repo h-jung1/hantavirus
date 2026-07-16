@@ -8,6 +8,8 @@ segment = ["m", "l", "s"]
 species= ["Hantavirus_Z10"]
 include: "rules/prepare_sequences.smk"
 include: "rules/construct_phylogeny.smk"
+include: "rules/annotate_phylogeny.smk"
+include:"rules/export.smk"
 
 rule all:
     input:
@@ -15,6 +17,11 @@ rule all:
         expand("results/{species}/{segment}/filtered.fasta", segment=segment, species=species),
         expand("results/{species}/{segment}/length_graph.png", species=species, segment=segment),
         expand("results/{species}/{segment}/prelim_tree.nwk", segment=segment, species=species),
-        expand("results/{species}/{segment}/node_data.nwk", segment=segment, species=species),
-        expand("results/{species}/{segment}/final_tree.nwk", segment=segment, species=species)
+        expand("results/{species}/{segment}/branch_lengths.json", segment=segment, species=species),
+        expand("results/{species}/{segment}/final_tree.nwk", segment=segment, species=species),
+        expand("results/{species}/{segment}/nt_muts.json", segment=segment, species=species),
+        expand("results/{species}/{segment}/aa_muts.json", segment=segment, species=species),
+        expand("results/{species}/{segment}/traits.json", segment=segment, species=species),
+        expand("results/{species}/{segment}/colors.tsv", segment=segment, species=species),
+        expand("auspice/{species}_{segment}.json", segment=segment, species=species)
 

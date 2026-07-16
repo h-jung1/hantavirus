@@ -4,7 +4,7 @@ This part of the workflow constructs the phylogenetic tree.
 REQUIRED INPUTS:
 
     metadata            = ../data/curated_metadata/{species}_{segment}.tsv
-    prepared_sequences  = results/aligned/{species}/{species}_{segment}_aligned.fasta
+    prepared_sequences  = results/{species}/{segment}/aligned.fasta
 
 OUTPUTS:
 
@@ -48,7 +48,7 @@ rule refine:
         metadata = "../data/curated_metadata/{species}_{segment}.tsv",
     output:
         tree = "results/{species}/{segment}/final_tree.nwk",
-        node_data = "results/{species}/{segment}/node_data.nwk"
+        node_data = "results/{species}/{segment}/branch_lengths.json"
     params:
         strain_id_field = config["strain_id_field"],
         coalescent = config['refine']['coalescent'],

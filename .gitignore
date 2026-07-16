@@ -7,3 +7,4 @@
 /shared
 /phylogeny/results
 /phylogeny/.snakemake
+/phylogeny/auspice
