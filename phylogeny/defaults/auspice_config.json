@@ -1,8 +1,8 @@
 {
-  "title": "Real-time tracking of Oropouche virus evolution",
+  "title": "Real-time tracking of Orthohantavirus",
   "maintainers": [
-    {"name": "Miguel Paredes", "url": "https://bedford.io/team/miguel-paredes/"},
-    {"name": "the Nextstrain team", "url": "https://nextstrain.org/team"}
+    {"name": "tba1", "url": "tba2"},
+    {"name": "tba3", "url": "tba4"}
   ],
   "data_provenance": [
     {
@@ -10,7 +10,7 @@
       "url": "https://www.ncbi.nlm.nih.gov/genbank/"
     }
   ],
-  "build_url": "https://github.com/nextstrain/oropouche",
+  "build_url": "tba",
   "colorings": [
     {
       "key": "num_date",

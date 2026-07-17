@@ -14,6 +14,12 @@ def parse_args():
 
     parser.add_argument("--input", help="Input file containing sequences")
     parser.add_argument("--output_dir", help="Output directory")
+    parser.add_argument(
+        "--min_length", type=float, help="Minimum length cutoff value"
+        )
+    parser.add_argument(
+        "--max_length", type=float, help="Maximum length cutoff value"
+        )
 
     return parser.parse_args()
 
@@ -24,15 +30,41 @@ def main():
     Path(args.output_dir).parent.mkdir(parents=True, exist_ok=True)
 
     records = SeqIO.parse(args.input, "fasta")
-    length_list = []
+    length_dict = {}
 
     for record in records:
         length = len(record.seq)
-        length_list.append(length)
+        seq_id = record.id
+        length_dict[seq_id] = length
 
-    df = pd.DataFrame(data=length_list)
+    ncbi_report = pd.read_csv("../data/ncbi_dataset_report.tsv", sep='\t')
+    accession_data = {}
+    for index, row in ncbi_report.iterrows():
+        accession = row["accession"]
+        if accession in length_dict.keys():
+            clean_country = str(row["geo-location"]).split(":")[0]
+            accession_data[accession] = {
+                "length": length_dict[accession],
+                "country": clean_country
+            }
 
-    sns.displot(df, kind="hist")
+    df = pd.DataFrame.from_dict(accession_data, orient="index")
+    df.index.name = "accession"
+    df = df.reset_index()
+
+    fig, axes = plt.subplots(2, 1, figsize=(12, 10))
+    sns.histplot(
+        df, x="length", hue="country", multiple="stack", bins=100, ax=axes[0]
+    )
+    sns.ecdfplot(
+        df, x="length", log_scale=True, stat="count", ax=axes[1]
+        )
+
+    axes[0].axvline(x=args.min_length, color="blue", linewidth=0.5)
+    axes[0].axvline(x=args.max_length, color="blue", linewidth=0.5)
+    axes[1].axvline(x=args.min_length, color="blue", linewidth=0.5)
+    axes[1].axvline(x=args.max_length, color="blue", linewidth=0.5)
+
     plt.savefig(args.output_dir, bbox_inches="tight")
 
 

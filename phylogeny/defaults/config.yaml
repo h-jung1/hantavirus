@@ -2,28 +2,28 @@
 filter:
   exclude: "defaults/exclude.txt"
   min_length:
-    Hantavirus_Z10:
-      l: 0
-      m: 0
-      s: 0
+    Orthohantavirus_andesense:
+      l: 200
+      m: 200
+      s: 100
     Orthohantavirus_hantanense:
-      l: 0
-      m: 0
-      s: 0
+      l: 300
+      m: 200
+      s: 260
     Orthohantavirus_puumalaense:
-      l: 0
-      m: 0
-      s: 0
+      l: 200
+      m: 150
+      s: 150
     Orthohantavirus_seoulense:
-      l: 0
-      m: 0
-      s: 0
+      l: 200
+      m: 150
+      s: 250
     Orthohantavirus_tulaense:
-      l: 0
-      m: 0
-      s: 0
+      l: 450
+      m: 200
+      s: 200
   max_length:
-    Hantavirus_Z10:
+    Orthohantavirus_andesense:
       l: 7000
       m: 4000
       s: 2000
@@ -53,6 +53,7 @@ refine:
   coalescent: "opt"
   date_inference: "marginal"
   clock_rate: 0.0014
+  root: "mid_point"
 
 ancestral:
   inference: "joint"
@@ -64,8 +65,7 @@ export:
   auspice_config: "defaults/auspice_config.json"
   description: "defaults/description.md"
   segment_metadata_columns:
-    - accession_{segment}
-    - qc_{segment}
-    - length_{segment}
-    - date_released_{segment}
-    - date_updated_{segment}
+    - accession_version
+    - length
+    - date_released
+    - date_updated

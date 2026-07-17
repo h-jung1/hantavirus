@@ -28,7 +28,7 @@ rule colors:
     input:
         color_schemes = "defaults/color_schemes.tsv",
         color_orderings = "defaults/color_orderings.tsv",
-        metadata = "../data/curated_metadata/{species}_{segment}.tsv",
+        metadata = "../results/{species}/{segment}/metadata_curated.tsv",
     output:
         colors = "results/{species}/{segment}/colors.tsv"
     shell:
@@ -44,7 +44,7 @@ rule export:
     """Exporting data files for for auspice"""
     input:
         tree = rules.refine.output.tree,
-        metadata = "../data/curated_metadata/{species}_{segment}.tsv",
+        metadata = "../results/{species}/{segment}/metadata_curated.tsv",
         branch_lengths = rules.refine.output.node_data,
         traits = rules.traits.output.node_data,
         nt_muts = rules.ancestral.output.node_data,
@@ -58,9 +58,7 @@ rule export:
         strain_id_field = config["strain_id_field"],
         metadata_columns = lambda w: [name.format(segment=w.segment) for name in config["export"]["segment_metadata_columns"]]
     shell:
-        r"""
-        exec &> >(tee {log:q})
-
+        """
         augur export v2 \
             --tree {input.tree} \
             --metadata {input.metadata} \

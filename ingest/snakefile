@@ -1,0 +1,8 @@
+
+configfile: "defaults/config.yaml"
+
+include: "rules/fetch_from_ncbi.smk"
+
+rule all:
+    input:
+        "data/refseqs.gb"

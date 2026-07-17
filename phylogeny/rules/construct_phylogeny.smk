@@ -45,7 +45,7 @@ rule refine:
     input:
         tree = rules.tree.output,
         alignment = rules.align.output,
-        metadata = "../data/curated_metadata/{species}_{segment}.tsv",
+        metadata = "../results/{species}/{segment}/metadata_curated.tsv",
     output:
         tree = "results/{species}/{segment}/final_tree.nwk",
         node_data = "results/{species}/{segment}/branch_lengths.json"
@@ -54,6 +54,7 @@ rule refine:
         coalescent = config['refine']['coalescent'],
         date_inference = config['refine']['date_inference'],
         clock_rate = config['refine']['clock_rate'],
+        root = config['refine']['root'],
     shell:
         """
         augur refine \
@@ -66,6 +67,7 @@ rule refine:
             --timetree \
             --coalescent {params.coalescent} \
             --clock-rate {params.clock_rate} \
+            --root {params.root} \
             --date-confidence \
             --date-inference {params.date_inference}
         """

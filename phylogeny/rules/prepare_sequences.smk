@@ -23,16 +23,22 @@ See Augur's usage docs for these commands for more details.
 rule graph_lengths:
     """
     Produces a graph of length distribution per species-segment combination
-    From this min_length and max_length for augur filter can be determined"""
+    From this min_length and max_length for augur filter can be determined
+    """
     input:
-        sequences = "../data/curated_sequences/{species}_{segment}.fasta",
+        sequences = "../results/{species}/{segment}/sequences_curated.fasta",
     output:
-        graphs = "results/{species}/{segment}/length_graph.png"
+        graphs = "results/{species}/{segment}/length_graph.png",
+    params:
+        length_cutoff_min = lambda w: config['filter']['min_length'][w.species][w.segment],
+        length_cutoff_max = lambda w: config['filter']['max_length'][w.species][w.segment],
     shell:
         """
         python playground/graph_lengths.py \
         --input {input.sequences} \
-        --output {output.graphs}
+        --min_length {params.length_cutoff_min} \
+        --max_length {params.length_cutoff_max} \
+        --output {output.graphs} 
         """
 
 rule filter:
@@ -42,8 +48,8 @@ rule filter:
       - excluding strains in {input.exclude}
     """
     input:
-        sequences = "../data/curated_sequences/{species}_{segment}.fasta",
-        metadata = "../data/curated_metadata/{species}_{segment}.tsv",
+        sequences = "../results/{species}/{segment}/sequences_curated.fasta",
+        metadata = "../results/{species}/{segment}/metadata_curated.tsv",
         exclude = config['filter']['exclude']
     output:
         sequences = "results/{species}/{segment}/filtered.fasta"

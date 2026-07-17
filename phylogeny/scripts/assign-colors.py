@@ -13,7 +13,9 @@ if __name__ == '__main__':
 
     parser.add_argument('--ordering', type=str, required=True, help="input ordering file")
     parser.add_argument('--color-schemes', type=str, required=True, help="input color schemes file")
-    parser.add_argument('--metadata', type=str, help="if provided, restrict colors to only those found in metadata")
+    parser.add_argument(
+        '--metadata', type=str, help="if provided, restrict colors to only those found in metadata"
+        )
     parser.add_argument('--output', type=str, required=True, help="output colors tsv")
     args = parser.parse_args()
 
@@ -57,7 +59,9 @@ if __name__ == '__main__':
                 print(f"No traits found for {trait_name}")
                 continue
             if len(schemes) < len(trait_array):
-                print(f"WARNING: insufficient colours available for trait {trait_name} - reusing colours!")
+                print(
+                    f"WARNING: too few colours available for trait {trait_name}, reusing colors"
+                    )
                 remain = len(trait_array)
                 color_array = []
                 while (remain > 0):

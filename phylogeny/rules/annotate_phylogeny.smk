@@ -69,7 +69,7 @@ rule traits:
     """Inferring ancestral traits for {params.columns!s}"""
     input:
         tree = rules.refine.output.tree,
-        metadata = "../data/curated_metadata/{species}_{segment}.tsv",
+        metadata = "../results/{species}/{segment}/metadata_curated.tsv",
     output:
         node_data = "results/{species}/{segment}/traits.json",
     params:
