@@ -8,3 +8,10 @@
 /phylogeny/results
 /phylogeny/.snakemake
 /phylogeny/auspice
+/ingest/data
+/ingest/results
+/ingest/.snakemake
+/scripts
+/rules
+/.flake8
+/species_tree
