@@ -29,7 +29,7 @@ rule extract_ncbi_dataset_sequences:
     input:
         dataset_package="data/ncbi_dataset.zip",
     output:
-        ncbi_dataset_sequences="../data/ncbi_dataset_sequences.fasta",
+        ncbi_dataset_sequences="data/ncbi_dataset_sequences.fasta",
     shell:
         """
         unzip -jp {input.dataset_package} \
@@ -54,27 +54,6 @@ rule format_ncbi_dataset_report:
             | csvtk rename -t -f accession -n accession_version \
             | csvtk -t mutate -f accession_version -n accession -p "^(.+?)\." --at 1 \
           > {output.ncbi_dataset_tsv}
-        """
-
-# Technically you can bypass this step and directly provide FASTA and TSV files
-# as input files for the curate pipeline.
-# We do the formatting here to have a uniform NDJSON file format for the raw
-# data that we host on data.nextstrain.org
-rule format_ncbi_datasets_ndjson:
-    input:
-        ncbi_dataset_sequences="data/ncbi_dataset_sequences.fasta",
-        ncbi_dataset_tsv="data/ncbi_dataset_report.tsv",
-    output:
-        ndjson="data/ncbi.ndjson",
-    shell:
-        """
-        augur curate passthru \
-            --metadata {input.ncbi_dataset_tsv} \
-            --fasta {input.ncbi_dataset_sequences} \
-            --seq-id-column accession_version \
-            --seq-field sequence \
-            --unmatched-reporting warn \
-            --duplicate-reporting warn \
         """
 
 rule download_refseq_gbk:

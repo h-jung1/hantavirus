@@ -1,8 +1,25 @@
 
 configfile: "defaults/config.yaml"
 
+segment = ["m", "l", "s"]
+species= ["Orthohantavirus_andesense", "Orthohantavirus_hantanense",
+            "Orthohantavirus_seoulense", "Orthohantavirus_tulaense", "Orthohantavirus_puumalaense"]
+PIDENT=90
+
 include: "rules/fetch_from_ncbi.smk"
+include:"rules/classify_sequences.smk"
+include: "rules/curate.smk"
 
 rule all:
     input:
-        "data/refseqs.gb"
+        "data/ncbi_dataset_sequences.fasta",
+        "data/ncbi_dataset_report.tsv",
+        "data/complete_refseqs.gb",
+        "data/refseq_proteins.fasta",
+        "results/diamond_alignments.tsv",
+        "data/ncbi_dataset_seq_assigned.tsv",
+        expand("results/{species}/{segment}/metadata_filtered.csv", segment=segment, species=species),
+        expand("results/{species}/{segment}/sequences_filtered.fasta", segment=segment, species=species),
+        expand("results/{species}/{segment}/ncbi.ndjson", segment=segment, species=species),
+        expand("results/{species}/{segment}/metadata_curated.tsv", segment=segment, species=species),
+        expand("results/{species}/{segment}/sequences_curated.fasta", segment=segment, species=species)
